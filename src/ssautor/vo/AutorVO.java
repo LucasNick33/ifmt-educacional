@@ -1,15 +1,19 @@
 package ssautor.vo;
 
 import base.vo.EntidadeVO;
+import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import ssbibliografia.vo.BibliografiaVO;
 
-/**
- *
- * @author LUCAS
- */
+@Entity()
+@Table(name = "autor")
 public class AutorVO extends EntidadeVO {
 
     @Id
@@ -18,6 +22,9 @@ public class AutorVO extends EntidadeVO {
     
     @Column(length = 50, nullable = false)
     private String nome;
+    
+    @ManyToMany(mappedBy = "AutorVO", targetEntity = BibliografiaVO.class, fetch = FetchType.LAZY)
+    private List<BibliografiaVO> listaBibliografia;
 
     public AutorVO() {
     }
@@ -44,6 +51,14 @@ public class AutorVO extends EntidadeVO {
         this.nome = nome;
     }
 
+    public List<BibliografiaVO> getListaBibliografia() {
+        return listaBibliografia;
+    }
+
+    public void setListaBibliografia(List<BibliografiaVO> listaBibliografia) {
+        this.listaBibliografia = listaBibliografia;
+    }
+
     @Override
     public String toString() {
         return this.nome;
@@ -58,7 +73,7 @@ public class AutorVO extends EntidadeVO {
         }
 
         if (nome.length() > 50) {
-            this.validacaoMsg += "\nNome muito extenso!";
+            this.validacaoMsg += "\nNome maior que 50 caracteres!";
             resp = false;
         }
 
